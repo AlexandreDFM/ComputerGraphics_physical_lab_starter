@@ -30,3 +30,23 @@
 *.exe
 *.out
 *.app
+
+#Vcpackages
+vcpkg_installed
+
+# Build directories
+build/
+bin/
+lib/
+cmake-*
+
+# IDE specific files
+*.sublime-workspace
+*.sublime-project
+*.code-workspace
+*.vscode/
+*.idea/
+*.vs/
+
+# Temporary folder
+tmp
