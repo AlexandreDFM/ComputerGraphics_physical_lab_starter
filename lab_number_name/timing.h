@@ -17,18 +17,15 @@
  */
 
 
-
 #ifndef CYCLONE_DEMO_TIMING_H
 #define CYCLONE_DEMO_TIMING_H
-
 
 
 /**
  * Represents all the information that the demo might need about the
  * timing of the game: current time, fps, frame number, and so on.
  */
-struct TimingData
-{
+struct TimingData {
     /** The current render frame. This simply increments. */
     unsigned frameNumber;
 
@@ -75,7 +72,7 @@ struct TimingData
     /**
      * Gets the global timing data object.
      */
-    static TimingData& get();
+    static TimingData &get();
 
     /**
      * Updates the timing system, should be called once per frame.
@@ -109,10 +106,8 @@ private:
     // These are private to stop instances being created: use get().
     TimingData() {}
     TimingData(const TimingData &) {}
-    TimingData& operator=(const TimingData &);
+    TimingData &operator=(const TimingData &);
 };
 
 
 #endif // CYCLONE_DEMO_TIMING_H
-
-

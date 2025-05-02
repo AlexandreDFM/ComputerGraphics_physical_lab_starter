@@ -10,7 +10,7 @@ Mover::Mover() : _id(++idProvider) {
 
     m_gravity = new cyclone::ParticleGravity(cyclone::Vector3(0, -10, 0));
     m_drag = new cyclone::ParticleDrag(0.1, 0.01);
-    m_forces = new cyclone::ParticleForceRegistry(); //Container
+    m_forces = new cyclone::ParticleForceRegistry(); // Container
     m_forces->add(m_particle, m_gravity);
     m_forces->add(m_particle, m_drag);
 
@@ -18,8 +18,8 @@ Mover::Mover() : _id(++idProvider) {
     setBase();
 }
 
-Mover::Mover(const cyclone::Vector3 & initPosition)
-    : _id(++idProvider), position(initPosition), basePosition(initPosition) {
+Mover::Mover(const cyclone::Vector3 &initPosition) :
+    _id(++idProvider), position(initPosition), basePosition(initPosition) {
     size = 2.0;
 
     // Initialize the particle
@@ -47,7 +47,8 @@ Mover::Mover(const cyclone::Vector3 & initPosition)
     setProjectileType(BASE);
 }
 
-Mover::Mover(cyclone::Vector3 pos, cyclone::Vector3 vel, cyclone::Vector3 acc, float mass, float damping) : _id(++idProvider) {
+Mover::Mover(cyclone::Vector3 pos, cyclone::Vector3 vel, cyclone::Vector3 acc, float mass, float damping) :
+    _id(++idProvider) {
     position = pos;
     basePosition = pos;
     size = 2.0;
@@ -55,7 +56,7 @@ Mover::Mover(cyclone::Vector3 pos, cyclone::Vector3 vel, cyclone::Vector3 acc, f
 
     m_gravity = new cyclone::ParticleGravity(cyclone::Vector3(0, -10, 0));
     m_drag = new cyclone::ParticleDrag(0.1, 0.1);
-    m_forces = new cyclone::ParticleForceRegistry(); //Container
+    m_forces = new cyclone::ParticleForceRegistry(); // Container
     m_forces->add(m_particle, m_gravity);
     m_forces->add(m_particle, m_drag);
 
@@ -167,11 +168,11 @@ void Mover::setWind() {
     cyclone::Vector3 wind(1.0f, 0, 0);
 
     m_particle->addForce(wind);
-    m_particle->setPosition(basePosition); //reset pos to initial pos
-    m_particle->setVelocity(0, 0, 0); //initial vel
-    m_particle->setMass(1.0f); //mass
-    m_particle->setDamping(0.99f); //damping
-    m_particle->setAcceleration(cyclone::Vector3::GRAVITY); //initial acc.
+    m_particle->setPosition(basePosition); // reset pos to initial pos
+    m_particle->setVelocity(0, 0, 0); // initial vel
+    m_particle->setMass(1.0f); // mass
+    m_particle->setDamping(0.99f); // damping
+    m_particle->setAcceleration(cyclone::Vector3::GRAVITY); // initial acc.
 }
 
 void Mover::setLaser() {
@@ -203,13 +204,11 @@ void Mover::setPistol() {
 }
 
 void Mover::reset() {
-    m_particle->setPosition(0, 3, 0); //initial pos
-    m_particle->setVelocity(0, 0, 0); //initial vel
-    m_particle->setMass(1.0f); //mass
-    m_particle->setDamping(0.99f); //damping
-    m_particle->setAcceleration(cyclone::Vector3::GRAVITY); //initial acc.
+    m_particle->setPosition(0, 3, 0); // initial pos
+    m_particle->setVelocity(0, 0, 0); // initial vel
+    m_particle->setMass(1.0f); // mass
+    m_particle->setDamping(0.99f); // damping
+    m_particle->setAcceleration(cyclone::Vector3::GRAVITY); // initial acc.
 }
 
-void Mover::setConnection(Mover* other) {
-    m_spring = new cyclone::MySpring(other->m_particle, 20.0f, 3.0f);
-}
+void Mover::setConnection(Mover *other) { m_spring = new cyclone::MySpring(other->m_particle, 20.0f, 3.0f); }

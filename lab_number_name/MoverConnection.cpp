@@ -6,8 +6,8 @@ MoverConnection::MoverConnection() {
     m_gravity = new cyclone::ParticleGravity(cyclone::Vector3(0, -10, 0));
     m_drag = new cyclone::ParticleDrag(0.1, 0.01);
 
-    Mover* moverA = new Mover(cyclone::Vector3(5, 5, 5));
-    Mover* moverB = new Mover(cyclone::Vector3(-5, 5, -5));
+    Mover *moverA = new Mover(cyclone::Vector3(5, 5, 5));
+    Mover *moverB = new Mover(cyclone::Vector3(-5, 5, -5));
 
     moverA->setConnection(moverB);
     moverB->setConnection(moverA);
@@ -26,20 +26,20 @@ MoverConnection::MoverConnection() {
 MoverConnection::~MoverConnection() {
     delete m_gravity;
     delete m_forces;
-    for (const auto mover : m_movers) {
+    for (const auto mover: m_movers) {
         delete mover;
     }
 }
 
 void MoverConnection::update(const float duration) const {
     m_forces->updateForces(duration);
-    for (const auto mover : m_movers) {
+    for (const auto mover: m_movers) {
         mover->update(duration);
     }
 }
 
 void MoverConnection::updateColor(const float duration) const {
-    for (const auto mover : m_movers) {
+    for (const auto mover: m_movers) {
         mover->updateColor(duration);
     }
 }
@@ -50,7 +50,7 @@ void MoverConnection::draw(const int shadow) const {
     }
 
     glBegin(GL_LINE_STRIP);
-    for (const auto m_mover : m_movers) {
+    for (const auto m_mover: m_movers) {
         const cyclone::Vector3 p = m_mover->m_particle->getPosition();
         glVertex3f(static_cast<float>(p.x), static_cast<float>(p.y), static_cast<float>(p.z));
     }
@@ -58,7 +58,7 @@ void MoverConnection::draw(const int shadow) const {
 }
 
 void MoverConnection::setInGlWindowMovers(std::map<int, Mover *> &winMovers) {
-    for (const auto mover : m_movers) {
+    for (const auto mover: m_movers) {
         winMovers[mover->getId()] = mover;
     }
 }
