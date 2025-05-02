@@ -28,18 +28,8 @@ MyGlWindow::MyGlWindow(int x, int y, int w, int h) : Fl_Gl_Window(x, y, w, h) {
     m_movers = std::map<int, Mover *>();
 
     Mover *first_object =
-            new Mover(cyclone::Vector3(-5, 3, 0), cyclone::Vector3(0, 0, 0), cyclone::Vector3(0, 0, 0), 1.0f, 1.0f);
+            new Mover(cyclone::Vector3(0, 2, 0), cyclone::Vector3(0, 0, 0), cyclone::Vector3(0, 0, 0), 1.0f, 1.0f);
     m_movers[first_object->getId()] = first_object;
-    Mover *second_object =
-            new Mover(cyclone::Vector3(0, 3, 0), cyclone::Vector3(0, 0, 0), cyclone::Vector3(0, 0, 0), 1.0f, 1.0f);
-    m_movers[second_object->getId()] = second_object;
-    Mover *third_object =
-            new Mover(cyclone::Vector3(5, 3, 0), cyclone::Vector3(0, 0, 0), cyclone::Vector3(0, 0, 0), 1.0f, 1.0f);
-    m_movers[third_object->getId()] = third_object;
-
-    m_connection = new MoverConnection();
-
-    m_connection->setInGlWindowMovers(m_movers);
 
     TimingData::init();
     run = 0;
@@ -154,8 +144,11 @@ void MyGlWindow::draw() {
             mover.second->draw(1);
         }
     }
-    if (m_connection)
-        m_connection->draw(1);
+    if (!m_moverConnection.empty()) {
+        for (auto& mover : m_moverConnection) {
+            mover->draw(1);
+        }
+    }
     unsetupShadows();
 
     glDisable(GL_BLEND);
@@ -167,8 +160,11 @@ void MyGlWindow::draw() {
             mover.second->draw(0);
         }
     }
-    if (m_connection)
-        m_connection->draw(0);
+    if (!m_moverConnection.empty()) {
+        for (auto& mover : m_moverConnection) {
+            mover->draw(0);
+        }
+    }
     glPopMatrix();
 
     putText("STUDENT_ID_AND_NAME", 10, 10, 0.5, 0.5, 1);
@@ -196,8 +192,11 @@ void MyGlWindow::update() {
 
     const float duration = static_cast<float>(TimingData::get().lastFrameDuration) * 0.003f;
 
-    if (m_connection)
-        m_connection->updateColor(static_cast<float>(TimingData::get().lastFrameTimestamp));
+    if (!m_moverConnection.empty()) {
+        for (auto& mover : m_moverConnection) {
+            mover->updateColor(static_cast<float>(TimingData::get().lastFrameTimestamp));
+        }
+    }
 
     if (!m_movers.empty())
         for (const auto mover: m_movers)
@@ -210,8 +209,11 @@ void MyGlWindow::update() {
         for (const auto mover: m_movers)
             mover.second->update(duration);
 
-    if (m_connection)
-        m_connection->update(duration);
+    if (!m_moverConnection.empty()) {
+        for (auto& mover : m_moverConnection) {
+            mover->update(duration);
+        }
+    }
 }
 
 void MyGlWindow::doPick() {
@@ -245,8 +247,11 @@ void MyGlWindow::doPick() {
         }
     }
 
-    if (m_connection)
-        m_connection->draw(0);
+    if (!m_moverConnection.empty()) {
+        for (auto& mover : m_moverConnection) {
+            mover->draw(0);
+        }
+    }
 
     // Draw the cubes, loading the names as we go
     // for (size_t i = 0; i < world->points.size(); ++i) {

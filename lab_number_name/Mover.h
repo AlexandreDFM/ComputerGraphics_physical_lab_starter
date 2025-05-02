@@ -57,7 +57,7 @@ private:
     int _id;
     static int idProvider;
     float size = 2.0;
-    projectileType projectileType = WIND;
+    projectileType projectileType = BASE;
     cyclone::Vector3 m_position = cyclone::Vector3(0, 0, 0);
     cyclone::ParticleGravity *m_gravity;
     cyclone::ParticleDrag *m_drag;

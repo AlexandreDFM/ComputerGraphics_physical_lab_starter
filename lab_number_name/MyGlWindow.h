@@ -56,7 +56,7 @@ private:
     Viewer *m_viewer;
     float fieldOfView;
     std::map<int, Mover *> m_movers;
-    MoverConnection *m_connection;
+    std::vector<MoverConnection *> m_moverConnection;
 
     void setProjection(int clearProjection = 1);
     void getMouseNDC(float &x, float &y);
