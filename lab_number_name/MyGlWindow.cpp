@@ -54,8 +54,8 @@ MyGlWindow::MyGlWindow(int x, int y, int w, int h) : Fl_Gl_Window(x, y, w, h) {
     m_viewer = new Viewer(viewPoint, viewCenter, upVector, 45.0f, aspect);
 
     // Use the factory to create Movers
-    MoverFactory& factory = MoverFactory::getInstance();
-    Mover* first_object = factory.createMover(cyclone::Vector3(0, 2, 0));
+    MoverFactory &factory = MoverFactory::getInstance();
+    Mover *first_object = factory.createMover(cyclone::Vector3(0, 2, 0));
     m_movers = factory.getMovers();
 
     TimingData::init();
