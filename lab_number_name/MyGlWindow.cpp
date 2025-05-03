@@ -145,7 +145,7 @@ void MyGlWindow::draw() {
         }
     }
     if (!m_moverConnection.empty()) {
-        for (auto& mover : m_moverConnection) {
+        for (auto &mover: m_moverConnection) {
             mover->draw(1);
         }
     }
@@ -161,7 +161,7 @@ void MyGlWindow::draw() {
         }
     }
     if (!m_moverConnection.empty()) {
-        for (auto& mover : m_moverConnection) {
+        for (auto &mover: m_moverConnection) {
             mover->draw(0);
         }
     }
@@ -193,7 +193,7 @@ void MyGlWindow::update() {
     const float duration = static_cast<float>(TimingData::get().lastFrameDuration) * 0.003f;
 
     if (!m_moverConnection.empty()) {
-        for (auto& mover : m_moverConnection) {
+        for (auto &mover: m_moverConnection) {
             mover->updateColor(static_cast<float>(TimingData::get().lastFrameTimestamp));
         }
     }
@@ -210,7 +210,7 @@ void MyGlWindow::update() {
             mover.second->update(duration);
 
     if (!m_moverConnection.empty()) {
-        for (auto& mover : m_moverConnection) {
+        for (auto &mover: m_moverConnection) {
             mover->update(duration);
         }
     }
@@ -248,7 +248,7 @@ void MyGlWindow::doPick() {
     }
 
     if (!m_moverConnection.empty()) {
-        for (auto& mover : m_moverConnection) {
+        for (auto &mover: m_moverConnection) {
             mover->draw(0);
         }
     }
@@ -324,12 +324,15 @@ int MyGlWindow::handle(int e)
             m_lastMouseX = Fl::event_x();
             m_lastMouseY = Fl::event_y();
 
+            if (Fl::event_button() == FL_MIDDLE_MOUSE) {
+                make_current();
+                return 1;
+            }
+
             if (m_pressedMouseButton == 1) {
                 doPick();
-
-                if (selected >= 0) {
+                if (selected >= 0)
                     std::cout << "picked is " << selected << std::endl;
-                }
                 damage(1);
                 return 1;
             };
@@ -358,8 +361,10 @@ int MyGlWindow::handle(int e)
                 damage(1);
                 return 1;
             }
+            m_pressedMouseButton = 0;
             break;
         case FL_DRAG: // if the user drags the mouse
+            // std::cout << "Is Pressed : " << m_pressedMouseButton << std::endl;
             if (selected >= 0 && m_pressedMouseButton == 1) {
 
                 double r1x, r1y, r1z, r2x, r2y, r2z;
@@ -384,21 +389,36 @@ int MyGlWindow::handle(int e)
                 const double fractionChangeY =
                         static_cast<double>(m_lastMouseY - Fl::event_y()) / static_cast<double>(this->h());
 
-                if (m_pressedMouseButton == 1) {
-                    m_viewer->rotate(static_cast<float>(fractionChangeX), static_cast<float>(fractionChangeY));
-                } else if (m_pressedMouseButton == 2) {
-                    m_viewer->zoom(static_cast<float>(fractionChangeY));
-                } else if (m_pressedMouseButton == 3) {
+                // ALT+Click for camera movement
+                if (Fl::event_state(FL_ALT)) {
+                    if (m_pressedMouseButton == FL_LEFT_MOUSE) {
+                        // Move the camera position
+                        m_viewer->translate(-static_cast<float>(fractionChangeX), -static_cast<float>(fractionChangeY),
+                                            true);
+                    }
+                } else if (Fl::event_button2()) {
+                    // Move the camera position
                     m_viewer->translate(-static_cast<float>(fractionChangeX), -static_cast<float>(fractionChangeY),
-                                        (Fl::event_key(FL_Shift_L) == 0) || (Fl::event_key(FL_Shift_R) == 0));
-                } else {
-                    std::cout << "Warning: dragging with unknown mouse button!  Nothing will be done" << std::endl;
+                                        true);
+                } else { // Normal Click for camera movement
+                    if (m_pressedMouseButton == FL_LEFT_MOUSE) {
+                        // Adjust the camera orientation
+                        m_viewer->rotate(static_cast<float>(fractionChangeX), static_cast<float>(fractionChangeY));
+                    }
                 }
 
                 m_lastMouseX = Fl::event_x();
                 m_lastMouseY = Fl::event_y();
                 redraw();
             }
+            return 1;
+        case FL_MOUSEWHEEL: // Handle the scroll event for zoom
+            if (Fl::event_dy() < 0) { // Scroll up
+                m_viewer->zoom(0.1f); // Adjust the zoom increment if needed
+            } else if (Fl::event_dy() > 0) { // Scroll down
+                m_viewer->zoom(-0.1f); // Adjust the zoom decrement if needed
+            }
+            redraw();
             return 1;
         case FL_KEYBOARD:
             key = Fl::event_key();
@@ -414,7 +434,7 @@ int MyGlWindow::handle(int e)
             }
             return 0;
         default:
-            return 0;
+            return Fl_Gl_Window::handle(e);
     }
 
     return 0;
