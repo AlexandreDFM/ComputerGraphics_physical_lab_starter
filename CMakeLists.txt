@@ -53,8 +53,6 @@ project(${PROJECT_NAME})
 find_package(FLTK CONFIG REQUIRED)
 find_package(glm CONFIG REQUIRED)
 
-find_package(GLUT REQUIRED)
-
 if (UNIX)
   find_package(FLTK REQUIRED)
   include_directories(${FLTK_INCLUDE_DIR})
