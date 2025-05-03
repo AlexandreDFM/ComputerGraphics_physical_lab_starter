@@ -1,4 +1,5 @@
 #include "MyGlWindow.h"
+#include "MoverFactory.h"
 
 #include <chrono>
 #include <iostream>
@@ -25,11 +26,10 @@ MyGlWindow::MyGlWindow(int x, int y, int w, int h) : Fl_Gl_Window(x, y, w, h) {
     float aspect = (static_cast<float>(w) / static_cast<float>(h));
     m_viewer = new Viewer(viewPoint, viewCenter, upVector, 45.0f, aspect);
 
-    m_movers = std::map<int, Mover *>();
-
-    Mover *first_object =
-            new Mover(cyclone::Vector3(0, 2, 0), cyclone::Vector3(0, 0, 0), cyclone::Vector3(0, 0, 0), 1.0f, 1.0f);
-    m_movers[first_object->getId()] = first_object;
+    // Use the factory to create Movers
+    MoverFactory& factory = MoverFactory::getInstance();
+    Mover* first_object = factory.createMover(cyclone::Vector3(0, 2, 0));
+    m_movers = factory.getMovers();
 
     TimingData::init();
     run = 0;
