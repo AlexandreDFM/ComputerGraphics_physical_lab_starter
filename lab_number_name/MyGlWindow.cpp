@@ -202,7 +202,7 @@ void MyGlWindow::draw() {
     glEnable(GL_COLOR_MATERIAL);
 }
 
-void MyGlWindow::test() {
+void MyGlWindow::resetTest() {
     if (!m_movers.empty()) {
         for (auto mover: m_movers) {
             mover.second->reset();
